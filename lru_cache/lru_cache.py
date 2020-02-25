@@ -36,6 +36,11 @@ class LRUCache:
             current_node = current_node.next
         return value
 
+    """
+    Check is the storage has a node with the given key
+    If it exists, it return the node, else
+    It returns None
+    """
     def has_key(self, key):
         if not len(self.storage):
             return None
@@ -78,7 +83,9 @@ class LRUCache:
         else:
             # Add the item to the tail of the cache
             self.add_dic_to_cache(key, value)
-
+    """
+    Creates a dictionary from the key-value pair, and then adds it to the cache
+    """
     def add_dic_to_cache(self, key, value):
         dic = dict()
         dic[key] = value

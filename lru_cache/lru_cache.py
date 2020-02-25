@@ -32,9 +32,22 @@ class LRUCache:
                 value = current_node.value[key]
                 # Move current node to the end
                 self.storage.move_to_end(current_node)
+                break
             current_node = current_node.next
         return value
 
+    def __hasattr__(self, key):
+        if not len(self.storage):
+            return None
+        current_node = self.storage.head
+        # Set the value to None
+        has_attr = False
+        while current_node:
+            if key in current_node.value:
+                has_attr = True
+                break
+            current_node = current_node.next
+        return has_attr
     """
     Adds the given key-value pair to the cache. The newly-
     added pair should be considered the most-recently used

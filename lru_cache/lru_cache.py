@@ -36,15 +36,17 @@ class LRUCache:
             current_node = current_node.next
         return value
 
-    def __hasattr__(self, key):
+    def has_key(self, key):
         if not len(self.storage):
             return None
         current_node = self.storage.head
         # Set the value to None
-        has_attr = False
+        has_attr =  None
         while current_node:
+            # Check if any of the nodes has the given key
             if key in current_node.value:
-                has_attr = True
+                # If the key exists, return the node
+                has_attr = current_node
                 break
             current_node = current_node.next
         return has_attr
@@ -60,4 +62,25 @@ class LRUCache:
     """
 
     def set(self, key, value):
-        pass
+        # Check if the key already exists
+        node_with_existing_key = self.has_key(key)
+
+        if (node_with_existing_key):
+            # update the value
+            node_with_existing_key.value[key] = value
+            # move it to the end of the cache
+            self.storage.move_to_end(node_with_existing_key)
+        elif len(self) >= self.limit:
+            # Remove the oldest
+            self.storage.remove_from_head()
+            # Add the item to the tail of the cache
+            self.add_dic_to_cache(key, value)
+        else:
+            # Add the item to the tail of the cache
+            self.add_dic_to_cache(key, value)
+
+    def add_dic_to_cache(self, key, value):
+        dic = dict()
+        dic[key] = value
+        self.storage.add_to_tail(dic)
+

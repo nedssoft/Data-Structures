@@ -9,7 +9,8 @@ class LRUCache:
     """
     def __init__(self, limit=10):
         self.limit = limit
-        self.storage = DoublyLinkedList()
+        self.dll = DoublyLinkedList()
+        self.storage = dict()
     """
     Retrieves the value associated with the given key. Also
     needs to move the key-value pair to the end of the order
@@ -21,40 +22,18 @@ class LRUCache:
         return len(self.storage)
 
     def get(self, key):
-        if not len(self.storage):
+        
+        # If the key is not in storage return None
+        if not key in self.storage:
             return None
-        current_node = self.storage.head
+        else:
 
-        # Set the value to None
-        value = None
-        while current_node:
-            if key in current_node.value:
-                value = current_node.value[key]
-                # Move current node to the end
-                self.storage.move_to_end(current_node)
-                break
-            current_node = current_node.next
-        return value
+            # Move the node to the tail as lest recently used
+           node = self.storage[key]
+           self.dll.move_to_end(node)
+            # Return value
+           return node.value[1]
 
-    """
-    Check is the storage has a node with the given key
-    If it exists, it return the node, else
-    It returns None
-    """
-    def has_key(self, key):
-        if not len(self.storage):
-            return None
-        current_node = self.storage.head
-        # Set the value to None
-        has_attr =  None
-        while current_node:
-            # Check if any of the nodes has the given key
-            if key in current_node.value:
-                # If the key exists, return the node
-                has_attr = current_node
-                break
-            current_node = current_node.next
-        return has_attr
     """
     Adds the given key-value pair to the cache. The newly-
     added pair should be considered the most-recently used
@@ -67,27 +46,36 @@ class LRUCache:
     """
 
     def set(self, key, value):
-        # Check if the key already exists
-        node_with_existing_key = self.has_key(key)
+       
+       # Check if key is already in storage
+       if key in self.storage:
+           # Overwrite it with the new value
+           node = self.storage[key]
+           node.value = (key, value)
+           # Move it to the end
+           self.dll.move_to_end(node)
 
-        if (node_with_existing_key):
-            # update the value
-            node_with_existing_key.value[key] = value
-            # move it to the end of the cache
-            self.storage.move_to_end(node_with_existing_key)
-        elif len(self) >= self.limit:
-            # Remove the oldest
-            self.storage.remove_from_head()
-            # Add the item to the tail of the cache
-            self.add_dic_to_cache(key, value)
-        else:
-            # Add the item to the tail of the cache
-            self.add_dic_to_cache(key, value)
-    """
-    Creates a dictionary from the key-value pair, and then adds it to the cache
-    """
-    def add_dic_to_cache(self, key, value):
-        dic = dict()
-        dic[key] = value
-        self.storage.add_to_tail(dic)
+        # Else check if the limit is reached
+       elif len(self) == self.limit:
+            head = self.dll.head
+
+            # Delete the head node from the storage
+            del self.storage[head.value[0]]
+
+            # Remove from the List
+            self.dll.remove_from_head()
+            
+            # Add the new value to the tail
+            self.dll.add_to_tail((key, value))
+
+            # Store the new node in the cache
+            self.storage[key] = self.dll.tail
+       else:
+
+           # Add to tail
+           self.dll.add_to_tail((key, value))
+
+                # Store the new node in the cache
+           self.storage[key] = self.dll.tail
+
 

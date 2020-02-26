@@ -68,21 +68,47 @@ class BinarySearchTree:
                 return False
             else:
                 return self.right.contains(target)
+
     # Return the maximum value found in the tree
     def get_max(self):
-        pass
+        max_value = self.value
+        # Check if the right is None
+        if self.value is None or self.right is None:
+            # Then the max value must be the current value
+            return max_value
+        
+        # Let's check the right
+        else:
+            return self.right.get_max()
+
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
     def for_each(self, cb):
-        pass
+        
+        if self.value is not None:
+            cb(self.value)
+        
+        # Check if the left is not None:
+
+        if self.left is not None:
+
+            # Transverse the left
+            self.left.for_each(cb)
+
+        # Check if the right is not None:
+        if self.right is not None:
+            # Transverse the right
+            self.right.for_each(cb)
 
     # DAY 2 Project -----------------------
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self, node):
+
         pass
+
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal

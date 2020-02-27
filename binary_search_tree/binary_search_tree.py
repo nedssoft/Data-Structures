@@ -58,7 +58,7 @@ class BinarySearchTree:
                 # It means the target is not at the left
                 return False
 
-        # Let's search the right
+        # Let's search the rightnode
         if target >= current_value:
 
             # Check if the right is none
@@ -93,7 +93,7 @@ class BinarySearchTree:
 
         if self.left is not None:
 
-            # Transverse the left
+            # Traverse the left
             self.left.for_each(cb)
 
         # Check if the right is not None:
@@ -105,21 +105,30 @@ class BinarySearchTree:
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
+    # L-Node-R
     def in_order_print(self, node):
+        
+        # Base case, check if node in None
+        if not node:
 
-        pass
+            # Return None
+            return None
+        # Check if there is a node at the left
+        if node.left:
+            # Traverse the left nodes
+            self.in_order_print(node.left)
+        # Print the node value
+        print(node.value)
 
+        # Check if there is a node by the right
+        if node.right:
 
+            # Traverse the nodes at the right
+            self.in_order_print(node.right)
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
-    def bft_print(self, node):
-        pass
 
-    # Print the value of every node, starting with the given node,
-    # in an iterative depth first traversal
-    def dft_print(self, node):
-        pass
-
+    
     # STRETCH Goals -------------------------
     # Note: Research may be required
 
